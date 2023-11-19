@@ -1,5 +1,6 @@
 import { Menu } from "lucide-react";
 import logo from "../assets/logo.png";
+import {  Link } from "react-router-dom";
 
 export default function Navbar() {
   return (
@@ -14,39 +15,41 @@ export default function Navbar() {
       </div>
       <ul className="gap-6 items-center flex-shrink-0 font-poppins text-xl lg:gap-20 md:gap=15 justify-center hidden sm:flex">
         <li>
-          <a href="/" className="hover:border-b-2 p-1 uppercase">
+          <Link to="/" className="p-1 uppercase border-b-2 border-transparent hover:border-b-2 hover:border-secondary transition duration-500">
             about us
-          </a>
+          </Link>
         </li>
         <li>
-          <a href="/" className="hover:border-b-2 p-1 uppercase">
+          <Link to="/" className="p-1 uppercase border-b-2 border-transparent hover:border-b-2 hover:border-secondary transition duration-500">
             services
-          </a>
+          </Link>
         </li>
         <li>
-          <a href="/" className="hover:border-b-2 p-1 uppercase">
+          <Link to="/" className="p-1 uppercase border-b-2 border-transparent hover:border-b-2 hover:border-secondary transition duration-500">
             contact
-          </a>
+          </Link>
         </li>
         <li>
-          <a href="/" className="hover:border-b-2 p-1 uppercase">
+          <Link to="/" className="p-1 uppercase border-b-2 border-transparent hover:border-b-2 hover:border-secondary transition duration-500">
             offer
-          </a>
+          </Link>
         </li>
       </ul>
       <div className="flex gap-6 items-center flex-shrink-0 font-poppins text-xl lg:gap-5 p-3 flex-col lg:flex-row">
-        <button
+        <Link
+          to="/"
           type="submit"
-          className="uppercase flex w-full lg:w-auto justify-center rounded-md bg-primary border-2 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-secondary hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          className="transition ease-in-out duration-300 uppercase flex w-full lg:w-auto justify-center rounded-md bg-primary border-2 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-secondary hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
           Sign in
-        </button>
-        <button
+        </Link>
+        <Link
+          to="/register"
           type="submit"
-          className="uppercase flex w-full lg:w-auto justify-center rounded-md bg-primary border-2 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-secondary hover:text-primary mt-2 lg:mt-0"
+          className="transition ease-in-out duration-300 uppercase flex w-full lg:w-auto justify-center rounded-md bg-primary border-2 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-secondary hover:text-primary mt-2 lg:mt-0"
         >
           Sign up
-        </button>
+        </Link>
       </div>
     </div>
   );

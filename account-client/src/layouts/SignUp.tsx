@@ -1,6 +1,47 @@
 import { Link } from "react-router-dom";
+import {useFormik} from "formik";
+import * as Yup from "yup";
 
 export default function SignUp() {
+
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      lastname: "",
+      email: "",
+      gender: true, //true for male, false for female
+      password: "",
+      confirmpassword: "",
+      tel:""
+    },
+    onSubmit: (values) => {
+      console.log(values);
+    },
+    validationSchema: Yup.object({
+      name: Yup.string()
+      .required('*Name is required')
+      .matches(/^[A-Za-z]+$/, "*Only letters are allowed"),
+      lastname: Yup
+      .string().required('*Lastname is required')
+      .matches(/^[A-Za-z]+$/, "*Only letters are allowed"),
+      email: Yup.string()
+      .required('*Email is required')
+      .email('*invalid email address'),
+      tel: Yup.string()
+      .required('*phone number is required')
+      .matches(/^[0-9]{9}( |)$/, "*Invalid phone number format")
+      .max(9, '*Your number is too long')
+      .min(9, '*You missed some digits'),
+      password: Yup.string()
+      .required('*enter your password')
+      .min(5, '*Must be at least 5 characters'),
+      confirmpassword: Yup.string()
+        .oneOf([Yup.ref('*confirm password')], '*passwords are not the same')
+        .required('*confirm your password'),
+    })
+  
+  });
+
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 pb-5 lg:px-8 bg-primary rounded-lg font-poppins  ">
@@ -11,7 +52,9 @@ export default function SignUp() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" action="#" method="POST">
+          <form className="space-y-6" 
+          onSubmit={formik.handleSubmit}
+          >
             <div className="flex flex-row gap-4">
               <div>
                 <label
@@ -22,14 +65,17 @@ export default function SignUp() {
                 </label>
                 <div className="mt-2 p-0.5 bg-secondary rounded-md">
                   <input
-                    id="name"
+                    placeholder="Name"
                     name="name"
-                    type="name"
-                    autoComplete="name"
-                    required
+                    value={formik.values.name}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     className="font-sm pl-2 text-poppins block w-full rounded-md border-0  py-1.5 text-gray-900 shadow-sm ring-2 ring-inset ring-primary placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-300 sm:text-sm sm:leading-6"
                   />
                 </div>
+                <div className="block text-xs font-small leading-6 text-red-400 uppercase bg-primary p-1">
+                    {formik.touched.name && formik.errors.name}
+                  </div>
               </div>
 
               <div>
@@ -42,13 +88,16 @@ export default function SignUp() {
                   </label>
                   <div className="mt-2 p-0.5 bg-secondary rounded-md">
                     <input
-                      id="lastname"
+                      placeholder="Last name"
                       name="lastname"
-                      type="lastname"
-                      autoComplete="lastname"
-                      required
+                      value={formik.values.lastname}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                       className="font-sm pl-2 text-poppins block w-full rounded-md border-0  py-1.5 text-gray-900 shadow-sm ring-2 ring-inset ring-primary placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-300 sm:text-sm sm:leading-6"
                     />
+                  </div>
+                  <div className="block text-xs font-small leading-6 text-red-400 uppercase p-1">
+                    {formik.touched.lastname && formik.errors.lastname}
                   </div>
                 </div>
               </div>
@@ -64,14 +113,17 @@ export default function SignUp() {
                 </label>
                 <div className="mt-2 p-0.5 bg-secondary rounded-md">
                   <input
-                    id="email"
+                    placeholder="Email address"
                     name="email"
-                    type="email"
-                    autoComplete="email"
-                    required
+                    value={formik.values.email}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     className="font-sm pl-2 text-poppins block w-full rounded-md border-0  py-1.5 text-gray-900 shadow-sm ring-2 ring-inset ring-primary placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-300 sm:text-sm sm:leading-6"
                   />
                 </div>
+                <div className="block text-xs font-small leading-6 text-red-400 uppercase p-1">
+                    {formik.touched.email && formik.errors.email}
+                  </div>
               </div>
 
               <div>
@@ -94,9 +146,10 @@ export default function SignUp() {
                      checked:focus:border-blue-80 checked:focus:before:scale-100 checked:focus:before:shadow-[0px_0px_0px_13px_#789ad0] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s]
                       dark:border-neutral-600 dark:checked:border-primary dark:checked:after:border-primary dark:checked:after:bg-primary dark:focus:before:shadow-[0px_0px_0px_13px_
                         rgba(255,255,255,0.4)] dark:checked:focus:border-primary dark:checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca]"
-                      type="radio"
-                      name="flexRadioDefault"
-                      id="radioDefault01"
+                        type="radio"
+                        name="flexRadioDefault"
+                        id="radioDefault01" 
+                        checked={true}
                     />
                     <label
                       className="mt-px inline-block pl-[0.15rem] hover:cursor-pointer text-xs font-small leading-6 text-gray-100 uppercase"
@@ -117,10 +170,10 @@ export default function SignUp() {
                      checked:focus:border-blue-80 checked:focus:before:scale-100 checked:focus:before:shadow-[0px_0px_0px_13px_#789ad0] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s]
                       dark:border-neutral-600 dark:checked:border-primary dark:checked:after:border-primary dark:checked:after:bg-primary dark:focus:before:shadow-[0px_0px_0px_13px_
                         rgba(255,255,255,0.4)] dark:checked:focus:border-primary dark:checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca]"
-                      type="radio"
-                      name="flexRadioDefault"
-                      id="radioDefault02"
-                      defaultChecked
+
+                        type="radio"
+                        name="flexRadioDefault"
+                        id="radioDefault02" 
                     />
                     <label
                       className="mt-px inline-block pl-[0.15rem] hover:cursor-pointer text-xs font-small leading-6 text-gray-100 uppercase"
@@ -135,27 +188,33 @@ export default function SignUp() {
 
             <div>
               <label
-                htmlFor="email"
+                htmlFor="tel"
                 className="block text-xs font-small leading-6 text-gray-100 uppercase"
               >
                 Phone Number
               </label>
               <div className="mt-2 p-0.5 bg-secondary rounded-md">
                 <input
-                  id="tel"
+                  placeholder="Phone number"
                   name="tel"
-                  type="tel"
-                  autoComplete="email"
-                  required
+                  value={formik.values.tel}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  autoComplete="tel"
+                  inputMode="tel"
+                  maxLength={9}
                   className="font-sm pl-2 text-poppins block w-full rounded-md border-0  py-1.5 text-gray-900 shadow-sm ring-2 ring-inset ring-primary placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-300 sm:text-sm sm:leading-6"
                 />
+                  </div>
+                <div className="block text-xs font-small leading-6 text-red-400 uppercase p-1">
+                    {formik.touched.tel && formik.errors.tel}
               </div>
             </div>
 
             <div>
               <div className="flex items-center justify-between">
                 <label
-                  htmlFor="password"
+                  htmlFor="Password"
                   className="block text-xs font-small leading-6 text-gray-100 uppercase"
                 >
                   Password
@@ -164,21 +223,25 @@ export default function SignUp() {
               <div className="mt-2">
                 <div className="mt-2 p-0.5 bg-secondary rounded-md">
                   <input
-                    id="password"
+                    placeholder="Password"
                     name="password"
-                    type="password"
+                    value={formik.values.password}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     autoComplete="current-password"
-                    required
                     className="pl-2 block w-full rounded-md border-0  py-1.5 text-gray-900 shadow-sm ring-2 ring-inset ring-primary placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-300 sm:text-sm sm:leading-6"
                   />
                 </div>
+                <div className="block text-xs font-small leading-6 text-red-400 uppercase p-1">
+                    {formik.touched.password && formik.errors.password}
+                  </div>
               </div>
             </div>
 
             <div>
               <div className="flex items-center justify-between">
                 <label
-                  htmlFor="password"
+                  htmlFor="confirmpassword"
                   className="block text-xs font-small leading-6 text-gray-100 uppercase"
                 >
                   Confirm Password
@@ -187,14 +250,18 @@ export default function SignUp() {
               <div className="mt-2">
                 <div className="mt-2 p-0.5 bg-secondary rounded-md">
                   <input
-                    id="confirmpassword"
+                    placeholder="Confirm password"
                     name="confirmpassword"
-                    type="confirmpassword"
+                    value={formik.values.confirmpassword}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     autoComplete="current-password"
-                    required
                     className="pl-2 block w-full rounded-md border-0  py-1.5 text-gray-900 shadow-sm ring-2 ring-inset ring-primary placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-300 sm:text-sm sm:leading-6"
                   />
                 </div>
+                <div className="block text-xs font-small leading-6 text-red-400 uppercase p-1">
+                    {formik.touched.confirmpassword && formik.errors.confirmpassword}
+                  </div>
               </div>
             </div>
 
@@ -205,6 +272,7 @@ export default function SignUp() {
               >
                 Sign up
               </button>
+             
             </div>
           </form>
 

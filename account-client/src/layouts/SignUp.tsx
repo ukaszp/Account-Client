@@ -1,8 +1,12 @@
 import { Link } from "react-router-dom";
 import {useFormik} from "formik";
 import * as Yup from "yup";
+import useAuthStore from '../scripts/useAuthStore';
 
-export default function SignUp() {
+export default function SignUp():JSX.Element {
+
+    const { register, isAuthenticated, registrationError } = useAuthStore();
+  
 
   const formik = useFormik({
     initialValues: {
@@ -12,11 +16,17 @@ export default function SignUp() {
       gender: true, //true for male, false for female
       password: "",
       confirmpassword: "",
-      tel:""
+      contactnumber:""
     },
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async (values, formikHelpers) => {
+      try {
+        await register(values, formikHelpers);
+        console.log('Form submitted successfully!');
+      } catch (error) {
+        console.error('An error occurred during form submission:', error);
+      }
     },
+    
     validationSchema: Yup.object({
       name: Yup.string()
       .required('*Name is required')
@@ -27,7 +37,7 @@ export default function SignUp() {
       email: Yup.string()
       .required('*Email is required')
       .email('*invalid email address'),
-      tel: Yup.string()
+      contactnumber: Yup.string()
       .required('*phone number is required')
       .matches(/^[0-9]{9}( |)$/, "*Invalid phone number format")
       .max(9, '*Your number is too long')
@@ -36,7 +46,7 @@ export default function SignUp() {
       .required('*enter your password')
       .min(5, '*Must be at least 5 characters'),
       confirmpassword: Yup.string()
-        .oneOf([Yup.ref('*confirm password')], '*passwords are not the same')
+        .oneOf([Yup.ref('password')], '*passwords are not the same')
         .required('*confirm your password'),
     })
   
@@ -44,7 +54,7 @@ export default function SignUp() {
 
   return (
     <>
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 pb-5 lg:px-8 bg-primary rounded-lg font-poppins  ">
+      <div className="flex min-h-full flex-1 flex-col justify-center px-6 pb-5 lg:px-8 bg-primary rounded-lg font-poppins max-w-[40rem] ">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-100 uppercase">
             Sign up
@@ -149,7 +159,8 @@ export default function SignUp() {
                         type="radio"
                         name="flexRadioDefault"
                         id="radioDefault01" 
-                        checked={true}
+                        checked={formik.values.gender===true}
+                        onChange={() => formik.setFieldValue('gender', true)}
                     />
                     <label
                       className="mt-px inline-block pl-[0.15rem] hover:cursor-pointer text-xs font-small leading-6 text-gray-100 uppercase"
@@ -174,6 +185,8 @@ export default function SignUp() {
                         type="radio"
                         name="flexRadioDefault"
                         id="radioDefault02" 
+                        checked={formik.values.gender===false}
+                        onChange={() => formik.setFieldValue('gender', false)}
                     />
                     <label
                       className="mt-px inline-block pl-[0.15rem] hover:cursor-pointer text-xs font-small leading-6 text-gray-100 uppercase"
@@ -188,7 +201,7 @@ export default function SignUp() {
 
             <div>
               <label
-                htmlFor="tel"
+                htmlFor="phonenumber"
                 className="block text-xs font-small leading-6 text-gray-100 uppercase"
               >
                 Phone Number
@@ -196,8 +209,8 @@ export default function SignUp() {
               <div className="mt-2 p-0.5 bg-secondary rounded-md">
                 <input
                   placeholder="Phone number"
-                  name="tel"
-                  value={formik.values.tel}
+                  name="contactnumber"
+                  value={formik.values.contactnumber}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   autoComplete="tel"
@@ -207,7 +220,7 @@ export default function SignUp() {
                 />
                   </div>
                 <div className="block text-xs font-small leading-6 text-red-400 uppercase p-1">
-                    {formik.touched.tel && formik.errors.tel}
+                    {formik.touched.contactnumber && formik.errors.contactnumber}
               </div>
             </div>
 
@@ -223,6 +236,7 @@ export default function SignUp() {
               <div className="mt-2">
                 <div className="mt-2 p-0.5 bg-secondary rounded-md">
                   <input
+                    type="password"
                     placeholder="Password"
                     name="password"
                     value={formik.values.password}
@@ -250,6 +264,7 @@ export default function SignUp() {
               <div className="mt-2">
                 <div className="mt-2 p-0.5 bg-secondary rounded-md">
                   <input
+                    type="password"
                     placeholder="Confirm password"
                     name="confirmpassword"
                     value={formik.values.confirmpassword}
@@ -268,11 +283,17 @@ export default function SignUp() {
             <div>
               <button
                 type="submit"
+                disabled={formik.isSubmitting}
                 className="transition ease-in-out duration-500 flex w-full justify-center rounded-md bg-primary border-2 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-secondary hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Sign up
               </button>
-             
+              <div className="block text-xs font-small leading-6 text-white uppercase p-1">
+                {isAuthenticated && <p>Registration successful!</p>}
+              </div>
+              <div className="block text-xs font-small leading-6 text-red-400 uppercase p-1">
+               {registrationError && <p>Error: {registrationError}</p>}
+              </div>
             </div>
           </form>
 
@@ -285,6 +306,12 @@ export default function SignUp() {
               Sign In
             </Link>
           </p>
+          {formik.touched.email && formik.errors.email && (
+          <div>{formik.errors.email}</div>
+        )}
+        {formik.touched.password && formik.errors.password && (
+          <div>{formik.errors.password}</div>
+        )}
         </div>
       </div>
     </>

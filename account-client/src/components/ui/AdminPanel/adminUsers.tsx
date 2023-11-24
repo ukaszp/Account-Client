@@ -6,7 +6,6 @@ import { Avatar, Button } from "@material-tailwind/react";
 import MaleAvatar from "@/assets/male_avatar.svg";
 import FemaleAvatar from "@/assets/female_avatar.svg";
 import { ChevronDown } from "lucide-react";
-import UserInfo from  "./userInfo"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,9 +28,11 @@ const AdminUsers = () => {
     setSelectedUser(user);
   };
   return (
-    <div className="flex w-[70rem] bg-opacity-90 bg-primary rounded-xl p-7  text-secondary justify-center max-h-[48rem] min-h-[43.5rem]">
+    <div className="flex w-[70rem] bg-opacity-90 bg-primary rounded-xl p-7  text-secondary justify-center max-h-[48rem] min-h-[40rem]">
       <div>
-        <p className="p-1 uppercase border-b-2 border-transparent hover:border-b-2 hover:border-secondary transition duration-500 text-xl flex justify-center pb-5">Users</p>
+        <p className="p-1 uppercase border-b-2 border-transparent hover:border-b-2 hover:border-secondary transition duration-500 text-xl flex justify-center pb-5">
+          Users
+        </p>
         <ScrollArea.Root className="w-[30rem] border-secondary border-2 rounded-lg">
           <ScrollArea.Viewport className="w-full max-h-[35rem] rounded">
             <div className="p-4">
@@ -44,23 +45,17 @@ const AdminUsers = () => {
                     className="py-1"
                   >
                     <div className="flex min-w-0 gap-x-4 text-gray-100 p-1">
-                      {user.gender === true ? (
-                        <Avatar
-                          src={MaleAvatar}
-                          alt="avatar"
-                          variant="rounded"
-                          size="md"
-                          className="border rounded-full"
-                        ></Avatar>
-                      ) : (
-                        <Avatar
-                          src={FemaleAvatar}
-                          alt="avatar"
-                          size="md"
-                          variant="rounded"
-                          className="border rounded-full"
-                        ></Avatar>
-                      )}
+                      <Avatar
+                        src={
+                          user?.gender === true
+                            ? MaleAvatar
+                            : FemaleAvatar
+                        }
+                        alt="avatar"
+                        variant="rounded"
+                        size="md"
+                        className="border rounded-full"
+                      ></Avatar>
                       <div className="min-w-0 flex-auto">
                         <p className="text-sm font-semibold leading-6 text-gray-100">
                           {user.name} {user.lastName}
@@ -73,9 +68,16 @@ const AdminUsers = () => {
                         <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button className="p-1.5 text-thin text-poppins font-light transition ease-in-out duration-300 uppercase flex w-full lg:w-auto justify-center rounded-md bg-primary border px-1 py-1.5 text-white shadow-sm hover:bg-secondary hover:text-primary">
-                                Options<ChevronDown size={16} strokeWidth={3} className=" pl-1"/>
-                              </Button>
+                              <div>
+                                <Button className="p-1.5 text-thin text-poppins font-light transition ease-in-out duration-300 uppercase flex w-full lg:w-auto justify-center rounded-md bg-primary border px-1 py-1.5 text-white shadow-sm hover:bg-secondary hover:text-primary">
+                                  Options
+                                  <ChevronDown
+                                    size={16}
+                                    strokeWidth={3}
+                                    className=" pl-1"
+                                  />
+                                </Button>
+                              </div>
                             </DropdownMenuTrigger>
                             {selectedUser && user.id === selectedUser.id && (
                               <DropdownMenuContent className="w-56 bg-zinc-900 text-gray-200">
@@ -84,11 +86,13 @@ const AdminUsers = () => {
                                 </DropdownMenuLabel>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuGroup>
-                                <Link to={`profile/${selectedUser.id}`}><DropdownMenuItem>LProfile</DropdownMenuItem></Link>
+                                  <Link to={`profile/${selectedUser.id}`}>
+                                    <DropdownMenuItem>Profile</DropdownMenuItem>
+                                  </Link>
                                   <DropdownMenuItem>Edit</DropdownMenuItem>
                                   <DropdownMenuItem>Settings</DropdownMenuItem>
-                                  <DropdownMenuItem>
-                                    Keyboard shortcuts
+                                  <DropdownMenuItem className="bg-red-600 hover:bg-red-00 rounded-lg">
+                                    Delete
                                   </DropdownMenuItem>
                                 </DropdownMenuGroup>
                               </DropdownMenuContent>

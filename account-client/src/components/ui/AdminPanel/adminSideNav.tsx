@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 import { Users, Settings } from "lucide-react"
 export function AdminSideNav() {
   return (
-    <div className={cn("pb-12 bg-primary rounded-xl w-[22rem] min-h-[70vh]")}>
+    <div className={cn("pb-12 bg-primary rounded-xl w-[22rem] min-h-[42rem] max-h-[48rem]")}>
       <div className="space-y-4 py-4">
         <div className="px-3 py-2">
           <div className="space-y-1">
